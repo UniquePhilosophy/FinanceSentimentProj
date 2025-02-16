@@ -1,0 +1,26 @@
+kafka:
+  bootstrap_servers: 'localhost:9092'
+  schema_registry_url: 'http://localhost:8081'
+
+producers:
+  financial_concerns:
+    topic: 'finance_concern'
+    x_api_producer:
+      source: 'x_api'
+    news_api_producer:
+      source: 'news_api'
+  financial-sentiments:
+    topic: 'finance_sentiment'
+
+consumers:
+  sentiment_analysis_consumer:
+    topic: 'finance_sentiment'
+    database: 'sentiments_db'
+
+stocks:
+  apple:
+    query: 'Apple $AAPL OR iPhone OR MacBook OR Apple Watch OR Apple event OR Apple keynote OR Apple earnings report OR Tim Cook OR Apple CEO'
+  google:
+    query: 'Google $GOOGL OR Alphabet Inc. OR Google earnings report OR Google CEO OR Sundar Pichai'
+  # tesla:
+  #   query: 'Tesla $TSLA OR Elon Musk OR Tesla earnings report OR Tesla CEO OR Tesla Model 3 OR Tesla Cybertruck'
