@@ -1,5 +1,5 @@
 import requests, json
-from producer_client import KafkaProducerClient
+from shared_frameworks.producer_client import KafkaProducerClient
 from utils.config_manager import ConfigManager
 
 config = ConfigManager.load_config()
