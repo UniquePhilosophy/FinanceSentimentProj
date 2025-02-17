@@ -32,6 +32,7 @@ class KafkaProducerClient:
             attempt = 0
             while attempt < self.retries:
                 try:
+                    print(f"Sending message: {message}")
                     self.producer.produce(topic=self.topic, value=message, value_schema=self.value_schema)
                     break
                 except Exception as e:
@@ -42,6 +43,7 @@ class KafkaProducerClient:
                         print("Exceeded maximum retries. Message not sent.")
         self.producer.flush()
         self.message_queue = []
+        print(f"Messages sent successfully to topic: {self.topic}")
 
     def close(self):
         self.flush_messages()

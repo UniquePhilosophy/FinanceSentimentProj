@@ -14,14 +14,13 @@ def fetch_tweets_for_stock(stock_query):
     headers = {
         "Authorization": f"Bearer {x_token}"
     }
-    params = {
-        # "query": stock_query,
-        "query": "#AAPL OR #Apple",
-        "tweet.fields": ["text","author_id","created_at"],
+    querystring = {
+        "query": stock_query,
+        "tweet.fields": "created_at,author_id,text",
         "max_results": "1"
     }
 
-    response = requests.get(url, headers=headers, params=params)
+    response = requests.request("GET", url, headers=headers, params=querystring)
     
     if response.status_code == 200:
         return response.json().get('data', [])
