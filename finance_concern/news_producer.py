@@ -11,12 +11,12 @@ news_token = api_keys['news-token']
 
 def fetch_articles_for_stock(stock):
     print(f"{stock}")
-    url = (f"https://newsapi.org/v2/everything?q={stock}&from=2025-02-15&to=2025-02-15&sortBy=popularity&apiKey={news_token}")
+    url = (f"https://newsapi.org/v2/everything?q={stock}&from=2025-02-18T20:36:55&to=2025-02-18T20:40:55&sortBy=popularity&apiKey={news_token}")
 
     response = requests.get(url)
     
     if response.status_code == 200:
-        print(response.json().get('articles', []))
+        print("Articles found.")
         return response.json().get('articles', [])
     else:
         print(f"Failed to fetch articles for query: {stock}. Status code: {response.status_code}")
@@ -37,5 +37,4 @@ def produce_articles_to_kafka():
             producer_client.send_message(message)
     
     producer_client.close()
-
-produce_articles_to_kafka()
+    print("News producer task completed.")

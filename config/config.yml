@@ -5,6 +5,8 @@ kafka:
 producers:
   financial_concerns:
     topic: 'finance_concern'
+    partitions: 2
+    replication_factor: 1
     x_api_producer:
       source: 'x_api'
     news_api_producer:
