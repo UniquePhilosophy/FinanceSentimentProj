@@ -3,7 +3,7 @@
   "name": "FinanceSentiment",
   "fields": [
     {"name": "source", "type": "string"},
-    {"name": "message", "type": "string"},
-    {"name": "sentiment", "type": "float"}
+    {"name": "sentiment", "type": "float"},
+    {"name": "stock", "type": "string"}
   ]
 }

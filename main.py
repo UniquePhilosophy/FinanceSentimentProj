@@ -1,8 +1,9 @@
 from kafka.admin import KafkaAdminClient, NewTopic
 from schedule import Scheduler
-import datetime, time, subprocess
+import datetime, time, subprocess, threading
 from utils.config_manager import ConfigManager
 from finance_concern import news_producer
+from finance_sentiment.sentiment_consumer import SentimentAnalysisConsumer
 
 def create_kafka_topics(config, retries=5, retry_delay=5):
     attempt = 0
@@ -69,7 +70,12 @@ if __name__ == "__main__":
         print("News producer task executed at 20:58.")
     ))
 
-    run_consumer()
+    sentimentAnalysisConsumer1 = SentimentAnalysisConsumer(1)
+    sentimentAnalysisConsumer2 = SentimentAnalysisConsumer(2)
+    sentimentAnalysisConsumerThread1 = threading.Thread(target=sentimentAnalysisConsumer1.run)
+    sentimentAnalysisConsumerThread2 = threading.Thread(target=sentimentAnalysisConsumer2.run)
+    sentimentAnalysisConsumerThread1.start()
+    sentimentAnalysisConsumerThread2.start()
 
     while not should_shutdown():
         try:
