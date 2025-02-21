@@ -10,21 +10,23 @@ class SentimentAnalysisConsumer:
         self.consumer_id = consumer_id
         self.consumer_config = {
             'bootstrap.servers': config['kafka']['bootstrap_servers'],
-            'group.id': 'finance-sentiment-group',
+            'group.id': config['consumers']['sentiment_analysis_consumer']['group'],
             'schema.registry.url': config['kafka']['schema_registry_url'],
             'auto.offset.reset': 'earliest',
             'client.id': f'consumer-{consumer_id}'
         }
         self.producer_client = KafkaProducerClient(
-            topic=config['producers']['financial_sentiment']['topic'],
-            batch_size=10
+            topic=config['producers']['financial_sentiments']['topic'],
+            partition_key='sentiment'
         )
         self.consumer = AvroConsumer(self.consumer_config)
-        self.consumer.subscribe(['finance-concern'])
+        self.consumer.subscribe(
+            [config['producers']['financial_sentiments']['topic']]
+            )
 
     def analyze_sentiment(self, message):
-        #... your sentiment analysis logic...
-        sentiment = 0  # Example
+        # sentiment analysis logic
+        sentiment = 0
         return sentiment
 
     def run(self):
@@ -40,7 +42,7 @@ class SentimentAnalysisConsumer:
                         raise KafkaException(msg.error())
 
                 message = msg.value()
-                sentiment = self.analyze_sentiment(message['message'])
+                sentiment = self.analyze_sentiment(message['text'])
 
                 sentiment_message = {
                     'source': message['source'],
@@ -54,17 +56,3 @@ class SentimentAnalysisConsumer:
         finally:
             self.consumer.close()
             self.producer_client.close()
-
-# Example usage in main.py
-if __name__ == "__main__":
-    #... your setup code...
-
-    consumer1 = SentimentAnalysisConsumer(1)
-    consumer2 = SentimentAnalysisConsumer(2)
-
-    consumer_thread1 = threading.Thread(target=consumer1.run)
-    consumer_thread2 = threading.Thread(target=consumer2.run)
-    consumer_thread1.start()
-    consumer_thread2.start()
-
-    #... your main loop...

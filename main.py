@@ -1,4 +1,5 @@
 from kafka.admin import KafkaAdminClient, NewTopic
+from kafka.errors import TopicAlreadyExistsError
 from schedule import Scheduler
 import datetime, time, subprocess, threading
 from utils.config_manager import ConfigManager
@@ -34,7 +35,9 @@ def create_kafka_topics(config, retries=5, retry_delay=5):
 
             print("Topics created successfully.")
             break
-
+        except TopicAlreadyExistsError:
+            print("Topics already exist.")
+            break
         except Exception as e:
             print(f"Failed to create topics: {e}")
             attempt += 1
@@ -54,7 +57,7 @@ def run_consumer():
 
 def should_shutdown():
     now = datetime.datetime.now()
-    shutdown_time = datetime.time(hour=22)
+    shutdown_time = datetime.time(hour=23)
     return now.time() >= shutdown_time
 
 if __name__ == "__main__":
@@ -65,9 +68,19 @@ if __name__ == "__main__":
     create_kafka_topics(config)
 
     scheduler = Scheduler()
-    scheduler.every().day.at("20:58").do(lambda: (
-        news_producer.produce_articles_to_kafka(),
-        print("News producer task executed at 20:58.")
+
+    # for testing purposes this function will generate a 
+    # timestamp 2 minutes in the future
+    def get_future_timestamp():
+        future_time = datetime.datetime.now() + datetime.timedelta(minutes=2)
+        print(f"Producer will run at {future_time.strftime('%H:%M')}.")
+        return future_time.strftime("%H:%M")
+
+    timestamp = get_future_timestamp()
+
+    scheduler.every().day.at(timestamp).do(lambda: (
+        print(f"{timestamp}: Executing News Producer."),
+        news_producer.produce_articles_to_kafka()        
     ))
 
     sentimentAnalysisConsumer1 = SentimentAnalysisConsumer(1)
@@ -90,4 +103,4 @@ if __name__ == "__main__":
         print("Docker Compose ended successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error ending Docker Compose: {e}")
-    print("Shutting down at 10 PM.")
+    print("Shutting down at 11 PM.")

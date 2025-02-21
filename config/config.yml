@@ -11,13 +11,14 @@ producers:
       source: 'x_api'
     news_api_producer:
       source: 'news_api'
-  financial-sentiments:
+  financial_sentiments:
     topic: 'finance_sentiment'
 
 consumers:
   sentiment_analysis_consumer:
     topic: 'finance_sentiment'
     database: 'sentiments_db'
+    group: 'finance-sentiment-group'
 
 stocks:
   apple:

@@ -1,0 +1,7 @@
+{
+  "type": "record",
+  "name": "FinanceSentiment",
+  "fields": [
+    {"name": "key", "type": "string"}
+  ]
+}
