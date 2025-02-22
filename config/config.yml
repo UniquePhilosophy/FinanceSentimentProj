@@ -16,7 +16,7 @@ producers:
 
 consumers:
   sentiment_analysis_consumer:
-    topic: 'finance_sentiment'
+    topic: 'finance_concern'
     database: 'sentiments_db'
     group: 'finance-sentiment-group'
 

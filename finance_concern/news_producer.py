@@ -22,7 +22,11 @@ def fetch_articles_for_stock(stock):
         return []
 
 def produce_articles_to_kafka():
-    producer_client = KafkaProducerClient(topic=config['producers']['financial_concerns']['topic'])
+    producer_client = KafkaProducerClient(
+        topic=config['producers']['financial_concerns']['topic'], 
+        partition_key='text', 
+        partition_strategy='hash'
+        )
     
     for stock, details in config['stocks'].items():
 
