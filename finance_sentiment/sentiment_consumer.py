@@ -1,8 +1,10 @@
 from confluent_kafka import KafkaException
 from confluent_kafka.avro import AvroConsumer
-from utils.config_manager import ConfigManager
 from shared_frameworks.producer_client import KafkaProducerClient
-import time
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from utils.config_manager import ConfigManager
+import time, torch
+import torch.nn.functional as F
 
 config = ConfigManager.load_config()
 
@@ -27,10 +29,22 @@ class SentimentAnalysisConsumer:
         )
         self.last_message_time = time.time()
 
-    def analyze_sentiment(self, message):
-        # sentiment analysis logic
-        sentiment = 0
-        return sentiment
+        self.tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
+        self.model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
+
+    def analyze_sentiment(self, text):
+        print("Analysing sentiment...")
+        try:
+            inputs = self.tokenizer(text, return_tensors='pt', truncation=True, max_length=512)
+            outputs = self.model(**inputs)
+            probs = F.softmax(outputs.logits, dim=-1)
+            sentiment = torch.argmax(probs).item()
+
+            sentiment_mapping = {0: -1, 1: 0, 2: 1}
+            return sentiment_mapping[sentiment]
+        except Exception as e:
+            print(f"Error while analyzing sentiment: {e} Returning 0.")
+            return 0
 
     def run(self):
         try:
@@ -54,7 +68,7 @@ class SentimentAnalysisConsumer:
                 print(f"Message received: {message} at consumer {self.consumer_id}")
                 self.last_message_time = current_time
                 message_count += 1
-                if message_count % 10 == 0:  # Update timestamp after every 10 messages
+                if message_count % 10 == 0:
                     self.last_message_time = current_time
 
                 sentiment = self.analyze_sentiment(message['text'])

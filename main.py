@@ -72,7 +72,7 @@ if __name__ == "__main__":
     # for testing purposes this function will generate a 
     # timestamp 2 minutes in the future
     def get_future_timestamp():
-        future_time = datetime.datetime.now() + datetime.timedelta(minutes=2)
+        future_time = datetime.datetime.now() + datetime.timedelta(minutes=10)
         print(f"Producer will run at {future_time.strftime('%H:%M')}.")
         return future_time.strftime("%H:%M")
 

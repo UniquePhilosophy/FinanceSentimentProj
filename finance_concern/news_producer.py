@@ -32,7 +32,7 @@ def produce_articles_to_kafka():
 
         articles = fetch_articles_for_stock(stock)
         # for article in articles[]: # uncomment to use ALL articles (DISABLE GCP BILLING!)
-        for article in articles[:2]:
+        for article in articles[:1]:
             message = {
                 'source': 'x_api', 
                 'text': article['content'],
