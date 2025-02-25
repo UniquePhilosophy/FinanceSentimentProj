@@ -17,7 +17,7 @@ Analytics programs need only to connect to the financial-sentiment topic to be a
 - Scheduler to schedule producers to run at different times.
 
 ## Data Flow
-![data flow diagram](images/example.png)
+![data flow diagram](images/financesentiments.png)
 
 ## Installation
 ### Step-by-Step Installation
