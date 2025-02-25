@@ -21,4 +21,5 @@ Analytics programs need only to connect to the financial-sentiment topic to be a
 - git clone
 - configure yaml file to meet computational requirements
 - edit main.py with appropriate schedules
+- create an API_KEYS.json file with your API keys for News API etc.
 - run main.py (first run will take a while as FinBERT models download locally)
