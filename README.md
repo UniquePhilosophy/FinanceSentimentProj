@@ -4,7 +4,7 @@
 ![data flow diagram](images/financesentiments.png)
 
 ## Overview
-This application allows users to collect financial opinions from across the web and convert them into normalized sentimentclass. s for analytics.
+This application allows users to collect financial opinions from across the web and convert them into normalized sentiment classes for analytics.
 
 The concept is that producers can be easily created by using the "producer_client.py" and creating new instances of the KafkaProducerClient. This means that the user can create a producer for each scraper, and have them all producing to the same topic. The producers can be run at scheduled intervals using the "schedule" library.
 
