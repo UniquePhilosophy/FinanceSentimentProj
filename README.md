@@ -1,5 +1,8 @@
 # Finance Sentiments
 
+## Data Flow
+![data flow diagram](images/financesentiments.png)
+
 ## Overview
 This application allows users to collect financial opinions from across the web and convert them into normalized sentimentclass. s for analytics.
 
@@ -15,9 +18,6 @@ Analytics programs need only to connect to the financial-sentiment topic to be a
 - Sentiment is analysed with FinBERT.
 - Sentiments, along with name of stock-type and source, produced to kafka.
 - Scheduler to schedule producers to run at different times.
-
-## Data Flow
-![data flow diagram](images/financesentiments.png)
 
 ## Installation
 ### Step-by-Step Installation
